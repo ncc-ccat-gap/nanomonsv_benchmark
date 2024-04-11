@@ -72,5 +72,6 @@ ggplot(PR,
   theme(legend.position = "bottom",
         panel.grid.major = element_line()) 
   
+#ggsave("../output/read_num_change.pdf", width = 20, height = 8, units = "cm") # no savana
 ggsave("../output/read_num_change.pdf", width = 28, height = 8, units = "cm")
 

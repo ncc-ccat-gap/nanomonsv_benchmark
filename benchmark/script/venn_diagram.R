@@ -29,7 +29,7 @@ gen_venn <- function(seqdata, benchmark, vfilename, label1, label2, label_main) 
                main.fontfamily = "Helvetica",
                main.cex = 0.8,
                main.pos = c(0.5, 1.0),
-               imagetype = "png",
+               imagetype = "tiff",
                # inverted = TRUE,
                width = 7,
                height = 4,
@@ -54,11 +54,11 @@ gen_venn <- function(seqdata, benchmark, vfilename, label1, label2, label_main) 
 }
 
 
-gen_venn("Original_ONT", "Arora_2019", "../output/venn_arrora_kataoka.png", "nanomonsv", "High-confidence SVs", "Benchmark (Arora)")
-gen_venn("Original_ONT", "Valle_Inclan_2020", "../output/venn_valle-inclan_kataoka.png", "nanomonsv", "High-confidence SVs", "Benchmark (Valle-Inclan)")
+gen_venn("Original_ONT", "Arora_2019", "../output/venn_arrora_kataoka.tiff", "nanomonsv", "High-confidence SVs", "Benchmark (Arora)")
+gen_venn("Original_ONT", "Valle_Inclan_2020", "../output/venn_valle-inclan_kataoka.tiff", "nanomonsv", "High-confidence SVs", "Benchmark (Valle-Inclan)")
 
-gen_venn("Valle_Inclan_ONT", "Arora_2019", "../output/venn_arrora_PRJEB27698-ONT.png", "nanomonsv", "High-confidence SVs", "Benchmark (Arora)")
-gen_venn("Valle_Inclan_ONT", "Valle_Inclan_2020", "../output/venn_valle-inclan_PRJEB27698-ONT.png", "nanomonsv", "High-confidence SVs", "Benchmark (Valle-Inclan)")
+gen_venn("Valle_Inclan_ONT", "Arora_2019", "../output/venn_arrora_PRJEB27698-ONT.tiff", "nanomonsv", "High-confidence SVs", "Benchmark (Arora)")
+gen_venn("Valle_Inclan_ONT", "Valle_Inclan_2020", "../output/venn_valle-inclan_PRJEB27698-ONT.tiff", "nanomonsv", "High-confidence SVs", "Benchmark (Valle-Inclan)")
 
-gen_venn("Valle_Inclan_PBS", "Arora_2019", "../output/venn_arrora_PRJEB27698-PBS.png", "nanomonsv", "High-confidence SVs", "Benchmark (Arora)")
-gen_venn("Valle_Inclan_PBS", "Valle_Inclan_2020", "../output/venn_valle-inclan_PRJEB27698-PBS.png", "nanomonsv", "High-confidence SVs", "Benchmark (Valle-Inclan)")
+gen_venn("Valle_Inclan_PBS", "Arora_2019", "../output/venn_arrora_PRJEB27698-PBS.tiff", "nanomonsv", "High-confidence SVs", "Benchmark (Arora)")
+gen_venn("Valle_Inclan_PBS", "Valle_Inclan_2020", "../output/venn_valle-inclan_PRJEB27698-PBS.tiff", "nanomonsv", "High-confidence SVs", "Benchmark (Valle-Inclan)")
