@@ -17,14 +17,14 @@ CONTROL_VCF=$3
 OUTPUT_DIR=$4
 
 DB_DIR=$PWD/db
-IMAGE_OBUTIL=$PWD/image/obutils.sif
+IMAGE_OBUTIL=$PWD/image/ob_utils_0.0.12c.sif
 IMAGE_SIMULATIONSVSET=$PWD/image/simulationsv-set_0.1.0.sif
 
 mkdir -p ${OUTPUT_DIR}/filt
 mkdir -p ${OUTPUT_DIR}/benchmark
 
 # somatic filter with controls + convert to nanomonsv format
-if [ CONTROL_VCF != "None" ]
+if [ ${CONTROL_VCF} = "None" ]
 then
   apptainer exec ${IMAGE_OBUTIL} \
     python3 $PWD/simulation_sv_set/ob_utils/${SVTOOL}_util.py \
@@ -41,6 +41,7 @@ else
       --margin 200 --max_control_support_read 0
 fi
 
+set +e
 # filtering
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
   python3 $PWD/simulation_sv_set/script/rmdup.py \

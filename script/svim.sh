@@ -12,9 +12,10 @@
 set -eux
 
 INPUT_BAM=$1
-OUTPUT_DIR=$2
+OUTPUT_VCF=$2
 REFERENCE=$3
 
+OUTPUT_DIR=$(dirname ${OUTPUT_VCF})
 mkdir -p ${OUTPUT_DIR}
 
 apptainer exec $PWD/image/svim_2.0.0.sif \

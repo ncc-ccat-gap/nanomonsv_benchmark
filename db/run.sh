@@ -1,7 +1,4 @@
 #! /usr/bin/env bash
-source ~/conda/x64/etc/profile.d/conda.sh
-conda activate nanomonsv_benchmark
-
 set -eux
 
 if [ ! -f hg19ToHg38.over.chain.gz ]

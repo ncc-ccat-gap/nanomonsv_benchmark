@@ -21,6 +21,12 @@ apptainer pull $PWD/image/cutesv_2.0.0.sif docker://aokad/cutesv:2.0.0
 apptainer pull $PWD/image/camphor_somatic_20221005.sif docker://aokad/camphor_somatic:20221005
 apptainer pull $PWD/image/svim_2.0.0.sif docker://aokad/svim:2.0.0
 apptainer pull $PWD/image/savana_1.0.3.sif docker://aokad/savana:1.0.3
+apptainer pull $PWD/image/ob_utils_0.0.12c.sif docker://aokad/ob_utils:0.0.12c
+apptainer pull $PWD/image/simulationsv-set_0.1.0.sif docker://aokad/simulationsv-set:0.1.0
+apptainer pull $PWD/image/nanomonsv-tutorial_0.1.0.sif docker://aokad/nanomonsv-tutorial:0.1.0
+
+# for bamtofastq
+apptainer pull $PWD/image/bwa_alignment_0.2.0.sif docker://genomon/bwa_alignment:0.2.0
 ```
 
 Download controlpanel. (nanomonsv)
@@ -46,13 +52,21 @@ For examle,
 ls $PWD/script/*.sh | xargs sed -i.bak 's;apptainer;/usr/local/package/apptainer/1.2.4/bin/apptainer;g'
 ```
 
+Set up databases.
+
+```
+apptainer shell $PWD/image/nanomonsv-tutorial_0.1.0.sif
+apptainer> cd $PWD/db
+apptainer> bash run.sh
+```
+
 ## 2. minimap2
 
 ```
 REFERENCE=reference/GRCh38.d1.vd1.fa
 
-qsub $PWD/script/minimap2.sh path/to/tumor/fastq.gz path/to/tumor.bam ${REFERENCE}
-qsub $PWD/script/minimap2.sh path/to/normal/fastq.gz path/to/normal.bam ${REFERENCE}
+qsub $PWD/script/minimap2.sh path/to/tumor.fastq.gz path/to/tumor.bam ${REFERENCE}
+qsub $PWD/script/minimap2.sh path/to/normal.fastq.gz path/to/normal.bam ${REFERENCE}
 ```
 
 ### 3. Run
@@ -64,12 +78,12 @@ REFERENCE=reference/GRCh38.d1.vd1.fa
 bash $PWD/run.sh ${SVTOOL} path/to/tumor.bam path/to/normal.bam output_dir ${REFERENCE}
 ```
 
-Attention: case run camphor,
+**Attention**: case run camphor,
 ```
 mkdir -p output_dir/fastq/
-gunzip -c path/to/tumor/fastq.gz > output_dir/fastq/tumor.fastq
+gunzip -c path/to/tumor.fastq.gz > path/to/tumor.fastq
 
-bash $PWD/run.sh camphor path/to/tumor.bam path/to/normal.bam output_dir ${REFERENCE}
+bash $PWD/run.sh camphor path/to/tumor.bam path/to/normal.bam output_dir ${REFERENCE} path/to/tumor.fastq
 ```
 
 See outputs,
@@ -89,13 +103,6 @@ conda activate nanomonsv_benchmark
 conda install nanomonsv_benchmark numpy r-base r-ggplot2 r-wesanderson r-tidyverse r-venndiagram
 
 ~/conda/x64/envs/nanomonsv_benchmark/bin/pip install annot_utils
-```
-
-Set up databases.
-
-```
-cd $PWD/db
-bash run.sh
 ```
 
 Run plot.

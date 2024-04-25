@@ -9,7 +9,7 @@ export LD_LIBRARY_PATH=/usr/local/lib
 mkdir -p ${OUTPUT_DIR}
 
 /usr/local/bin/bamtofastq collate=1 exclude=QCFAIL,SECONDARY,SUPPLEMENTARY tryoq=0 \
-    filename=${INPUT_BAM}.bam \
+    filename=${INPUT_BAM} \
     F=${OUTPUT_DIR}/R1.fastq \
     F2=${OUTPUT_DIR}/R2.fastq \
     T=${OUTPUT_DIR}/temp.txt \
