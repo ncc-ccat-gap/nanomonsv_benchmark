@@ -6,13 +6,12 @@ BAM_NORMAL=$3
 OUTPUT_DIR=$4
 REFERENCE=$5
 
-WDIR=${OUTPUT_DIR}/${SVTOOL}
 SCRIPT_DIR=$(dirname $0)/script
 
 if [ $SVTOOL = "nanomonsv" ]
 then
-    OUTPUT_PREFIX_TUMOR=${WDIR}/tumor/tumor
-    OUTPUT_PREFIX_NORMAL=${WDIR}/normal/normal
+    OUTPUT_PREFIX_TUMOR=${OUTPUT_DIR}/tumor/tumor
+    OUTPUT_PREFIX_NORMAL=${OUTPUT_DIR}/normal/normal
     OUTPUT_TUMOR_TXT=${OUTPUT_PREFIX_TUMOR}.nanomonsv.result.txt
     OUTPUT_TUMOR_VCF=${OUTPUT_PREFIX_NORMAL}.nanomonsv.result.vcf
     CONTROL_PANEL_PREFIX=${SCRIPT_DIR}/control_panel/hprc_year1_data_freeze_nanopore_minimap2_2_24_merge_control/hprc_year1_data_freeze_nanopore_minimap2_2_24_merge_control
@@ -24,31 +23,31 @@ then
         ${TUMOR_BAM} ${NORMAL_BAM} ${OUTPUT_PREFIX_TUMOR} ${OUTPUT_PREFIX_NORMAL} \
         ${REFERENCE} ${CONTROL_PANEL_PREFIX}
 
-    qsub -N ${SVTOOL}_filt -hold_jid ${SVTOOL} ${SCRIPT_DIR}/filt_svtools.sh ${SVTOOL} ${OUTPUT_TUMOR_TXT} ${OUTPUT_TUMOR_TXT} ${WDIR}/filt
+    qsub -N ${SVTOOL}_filt -hold_jid ${SVTOOL} ${SCRIPT_DIR}/filt_svtools.sh ${SVTOOL} ${OUTPUT_TUMOR_TXT} ${OUTPUT_TUMOR_TXT} ${OUTPUT_DIR}
 
 else
     if [ $SVTOOL = "camphor" ]
     then
 
-        FASTQ_SECONDARY=${WDIR}/fastq/S.fastq
-        OUTPUT_DIR_TUMOR=${WDIR}/tumor
-        OUTPUT_DIR_NORMAL=${WDIR}/normal
+        FASTQ_TUMOR=${OUTPUT_DIR}/fastq/tumor.fastq
+        OUTPUT_DIR_TUMOR=${OUTPUT_DIR}/tumor
+        OUTPUT_DIR_NORMAL=${OUTPUT_DIR}/normal
         OUTPUT_TUMOR=${OUTPUT_DIR_TUMOR}/somatic_SV.vcf
         OUTPUT_NORMAL=None
 
-        if [ ! -e ${FASTQ_SECONDARY} ]; then
-            qsub -N camphor_bamtofastq ${SCRIPT_DIR}/bamtofastq.sh ${BAM_TUMOR} ${WDIR}
+        if [ ! -e ${FASTQ_TUMOR} ]; then
+            qsub -N camphor_bamtofastq ${SCRIPT_DIR}/bamtofastq.sh ${BAM_TUMOR} ${OUTPUT_DIR}
         fi
 
         qsub -N camphor_svcall ${SCRIPT_DIR}/camphor_svcall.sh ${BAM_TUMOR} ${OUTPUT_DIR_TUMOR} ${REFERENCE}
         qsub -N camphor_svcall ${SCRIPT_DIR}/camphor_svcall.sh ${BAM_NORMAL} ${OUTPUT_DIR_NORMAL} ${REFERENCE}
 
         qsub -N ${SVTOOL} -hold_jid camphor_bamtofastq,camphor_svcall ${SCRIPT_DIR}/camphor_comparision.sh \
-            ${OUTPUT_DIR_TUMOR} ${OUTPUT_DIR_NORMAL} ${BAM_TUMOR} ${BAM_NORMAL} ${FASTQ_SECONDARY} ${OUTPUT_DIR_TUMOR}
+            ${OUTPUT_DIR_TUMOR} ${OUTPUT_DIR_NORMAL} ${BAM_TUMOR} ${BAM_NORMAL} ${FASTQ_TUMOR} ${OUTPUT_DIR_TUMOR}
 
     if [ $SVTOOL = "savana" ]
     then
-        OUTPUT_DIR_TUMOR=${WDIR}/tumor
+        OUTPUT_DIR_TUMOR=${OUTPUT_DIR}/tumor
         OUTPUT_TUMOR=${OUTPUT_DIR_TUMOR}/$(basename ${OUTPUT_DIR_TUMOR}/*.sv_breakpoints.vcf)
         OUTPUT_NORMAL=None
 
@@ -58,23 +57,23 @@ else
 
         if [ $SVTOOL = "delly" ]
         then
-            OUTPUT_TUMOR=${WDIR}/tumor/delly.bcf
-            OUTPUT_NORMAL=${WDIR}/normal/delly.bcf
+            OUTPUT_TUMOR=${OUTPUT_DIR}/tumor/delly.bcf
+            OUTPUT_NORMAL=${OUTPUT_DIR}/normal/delly.bcf
 
         elif [ $SVTOOL = "sniffles2" ]
         then
-            OUTPUT_TUMOR=${WDIR}/tumor/sniffles2.vcf
-            OUTPUT_NORMAL=${WDIR}/normal/sniffles2.vcf
+            OUTPUT_TUMOR=${OUTPUT_DIR}/tumor/sniffles2.vcf
+            OUTPUT_NORMAL=${OUTPUT_DIR}/normal/sniffles2.vcf
 
         elif [ $SVTOOL = "cutesv" ]
         then
-            OUTPUT_TUMOR=${WDIR}/tumor/cutesv.vcf
-            OUTPUT_NORMAL=${WDIR}/normal/cutesv.vcf
+            OUTPUT_TUMOR=${OUTPUT_DIR}/tumor/cutesv.vcf
+            OUTPUT_NORMAL=${OUTPUT_DIR}/normal/cutesv.vcf
 
         elif [ $SVTOOL = "svim" ]
         then
-            OUTPUT_TUMOR=${WDIR}/tumor/variants.vcf
-            OUTPUT_NORMAL=${WDIR}/normal/variants.vcf
+            OUTPUT_TUMOR=${OUTPUT_DIR}/tumor/variants.vcf
+            OUTPUT_NORMAL=${OUTPUT_DIR}/normal/variants.vcf
         else
             echo "Unexpected svtool "${SVTOOL}
             exit 1
@@ -84,5 +83,5 @@ else
 
     fi
 
-    qsub -N ${SVTOOL}_filt -hold_jid ${SVTOOL} ${SCRIPT_DIR}/filt_svtools.sh ${SVTOOL} ${OUTPUT_TUMOR} ${OUTPUT_NORMAL} ${WDIR}/filt
+    qsub -N ${SVTOOL}_filt -hold_jid ${SVTOOL} ${SCRIPT_DIR}/filt_svtools.sh ${SVTOOL} ${OUTPUT_TUMOR} ${OUTPUT_NORMAL} ${OUTPUT_DIR}
 fi

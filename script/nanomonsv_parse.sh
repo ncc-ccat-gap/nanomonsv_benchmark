@@ -14,7 +14,9 @@ set -eux
 INPUT_BAM=$1
 OUTPUT_PREFIX=$2
 
-singularity exec $PWD/image/nanomonsv_v0.5.0.sif \
+IMAGE_DIR=$(dirname $0)/../image
+
+apptainer exec ${IMAGE_DIR}/nanomonsv_v0.5.0.sif \
   nanomonsv parse \
     ${INPUT_BAM} \
     ${OUTPUT_PREFIX}

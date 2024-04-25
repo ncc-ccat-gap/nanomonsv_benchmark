@@ -15,7 +15,9 @@ set -eux
 INPUT_BAM=$1
 OUTPUT_VCF=$2
 
-singularity exec $PWD/image/sniffles2_2.0.7.sif \
+IMAGE_DIR=$(dirname $0)/../image
+
+apptainer exec ${IMAGE_DIR}/sniffles2_2.0.7.sif \
   sniffles \
     -i ${INPUT_BAM} \
     -v ${OUTPUT_VCF} \

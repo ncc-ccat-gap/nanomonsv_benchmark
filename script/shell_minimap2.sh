@@ -17,8 +17,12 @@ INPUT_FASTQ=$1
 OUTPUT_BAM=$2
 REFERENCE=$3
 
-SCRIPT_DIR=$(dirname $0)/script
-IMAGE_DIR=$(dirname $0)/../image
+mkdir -p $(dirname ${OUTPUT_BAM})
 
-apptainer run ${IMAGE_DIR}/minimap2_2.17.sif \
-  bash SCRIPT_DIR}/shell_minimap2.sh ${INPUT_FASTQ} ${OUTPUT_BAM} ${REFERENCE}
+minimap2 -ax map-ont -t 8 -p 0.1 \
+  ${REFERENCE} ${INPUT_FASTQ} | samtools view -Shb > ${OUTPUT_BAM}.unsorted
+
+samtools sort -@ 8 -m 2G ${OUTPUT_BAM}.unsorted -o ${OUTPUT_BAM}
+samtools index ${OUTPUT_BAM}
+
+rm -rf ${OUTPUT_BAM}.unsorted

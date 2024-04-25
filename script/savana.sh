@@ -19,9 +19,11 @@ NORMAL_BAM=$2
 OUTPUT_DIR=$3
 REFERENCE=$4
 
+IMAGE_DIR=$(dirname $0)/../image
+
 mkdir -p ${OUTPUT_DIR}
 
-singularity exec $PWD/image/savana_1.0.3.sif \
+apptainer exec ${IMAGE_DIR}/savana_1.0.3.sif \
   savana run \
     --tumour ${TUMOR_BAM} \
     --normal ${NORMAL_BAM} \
