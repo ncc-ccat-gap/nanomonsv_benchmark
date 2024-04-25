@@ -13,9 +13,9 @@
 
 set -eux
 
-RUNID=$1
-SAMPLE=$2
+INPUT_BAM=$1
+OUTPUT_DIR=$2
 
 singularity exec $PWD/image/bwa_alignment_0.2.0.sif \
-    bash $PWD/script/shell_bamtofastq.sh ${RUNID} ${SAMPLE}
+    bash $PWD/script/shell_bamtofastq.sh ${INPUT_BAM} ${OUTPUT_DIR}
 

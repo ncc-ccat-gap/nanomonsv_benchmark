@@ -7,9 +7,10 @@
 #$ -e ./log/
 #$ -o ./log/
 #$ -j y
-#$ -l s_vmem=45G
-#$ -l mem_req=45G
-#$ -pe def_slot 8
+#$ -l s_vmem=256G
+#$ -pe def_slot 2
+#$ -l d_rt=2880:00:00   # 4 month
+#$ -l s_rt=2880:00:00
 
 set -eux
 
@@ -20,10 +21,10 @@ REFERENCE=$4
 
 mkdir -p ${OUTPUT_DIR}
 
-singularity exec $PWD/image/savana_0.2.3.sif \
-  savana \
+singularity exec $PWD/image/savana_1.0.3.sif \
+  savana run \
     --tumour ${TUMOR_BAM} \
     --normal ${NORMAL_BAM} \
     --outdir ${OUTPUT_DIR} \
     --ref    ${REFERENCE} \
-    --threads 8
+    --threads 2
