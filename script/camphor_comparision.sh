@@ -22,10 +22,7 @@ CONTROL_BAM=$4
 TUMOR_FASTQ=$5
 OUTPUT_DIR=$6
 
-SCRIPT_DIR=$(dirname $0)/script
-IMAGE_DIR=$(dirname $0)/../image
-
 mkdir -p ${OUTPUT_DIR}
 
-apptainer exec ${IMAGE_DIR}/camphor_somatic_20221005.sif \
-    bash ${SCRIPT_DIR}/shell_camphor_comparision.sh ${TUMOR_DIR} ${CONTROL_DIR} ${TUMOR_BAM} ${CONTROL_BAM} ${TUMOR_FASTQ} ${OUTPUT_DIR}
+apptainer exec $PWD/image/camphor_somatic_20221005.sif \
+    bash $PWD/script/shell_camphor_comparision.sh ${TUMOR_DIR} ${CONTROL_DIR} ${TUMOR_BAM} ${CONTROL_BAM} ${TUMOR_FASTQ} ${OUTPUT_DIR}

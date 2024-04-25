@@ -16,28 +16,27 @@ TUMOR_TXT=$1
 TUMOR_VCF=$2
 OUTPUT_DIR=$3
 
-SCRIPT_DIR=$(dirname $0)
-DB_DIR=${SCRIPT_DIR}/${DB_DIR}
-IMAGE_SIMULATIONSVSET=${SCRIPT_DIR}/../image/simulationsv-set_0.1.0.sif
+DB_DIR=$PWD/db
+IMAGE_SIMULATIONSVSET=$PWD/image/simulationsv-set_0.1.0.sif
 
 mkdir -p ${OUTPUT_DIR}/filt
 mkdir -p ${OUTPUT_DIR}/benchmark
 
 # filtering
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
-  python3 ${SCRIPT_DIR}/../simulation_sv_set/script/nanomonsv_filter.py \
+  python3 $PWD/simulation_sv_set/script/nanomonsv_filter.py \
     ${TUMOR_TXT} \
     ${TUMOR_VCF} > \
     ${OUTPUT_DIR}/filt/${SVTOOL}_sv.filt.txt
 
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
-  python3 ${SCRIPT_DIR}/../simulation_sv_set/script/rmdup.py \
+  python3 $PWD/simulation_sv_set/script/rmdup.py \
     ${OUTPUT_DIR}/filt/${SVTOOL}_sv.filt.txt > \
     ${OUTPUT_DIR}/filt/${SVTOOL}_sv.filt2.txt
 
 # sort by chromosome + filtering scaffold
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
-  python3 ${SCRIPT_DIR}/../simulation_sv_set/script/sort_bedpe.py \
+  python3 $PWD/simulation_sv_set/script/sort_bedpe.py \
     ${OUTPUT_DIR}/filt/${SVTOOL}_sv.filt2.txt > \
     ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.txt
 

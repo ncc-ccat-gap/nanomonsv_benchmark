@@ -16,9 +16,6 @@ set -eux
 INPUT_BAM=$1
 OUTPUT_DIR=$2
 
-SCRIPT_DIR=$(dirname $0)/script
-IMAGE_DIR=$(dirname $0)/../image
-
-apptainer exec ${IMAGE_DIR}/bwa_alignment_0.2.0.sif \
-    bash ${SCRIPT_DIR}/shell_bamtofastq.sh ${INPUT_BAM} ${OUTPUT_DIR}
+apptainer exec $PWD/image/bwa_alignment_0.2.0.sif \
+    bash $PWD/script/shell_bamtofastq.sh ${INPUT_BAM} ${OUTPUT_DIR}
 

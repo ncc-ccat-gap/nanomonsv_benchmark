@@ -17,11 +17,10 @@ OUTPUT_VCF=$2
 REFERENCE=$3
 
 OUTPUT_DIR=$(dirname ${OUTPUT_VCF})
-IMAGE_DIR=$(dirname $0)/../image
 
 mkdir -p ${OUTPUT_DIR}
 
-apptainer exec ${IMAGE_DIR}/cutesv_2.0.0.sif \
+apptainer exec $PWD/image/cutesv_2.0.0.sif \
   cuteSV \
     ${INPUT_BAM} \
     ${REFERENCE} \
