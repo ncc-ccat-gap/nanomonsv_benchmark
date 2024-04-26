@@ -61,8 +61,8 @@ apptainer exec ${IMAGE_SIMULATIONSVSET}  \
 
 head -n 1 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.txt \
   > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.pass.txt
-tail -n +2 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.txt | grep PASS \
-  >> ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.pass.txt
+tail -n +2 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.txt | grep PASS \
+  >> ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.pass.txt
 
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
   python3 $PWD/script/filt/benchmark_compare.py \

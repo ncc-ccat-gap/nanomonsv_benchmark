@@ -7,8 +7,8 @@
 #$ -e ./log/
 #$ -o ./log/
 #$ -j y
-#$ -l s_vmem=8G
-
+#$ -l s_vmem=16G
+#$ -pe def_slot 2
 set -ux
 
 SVTOOL=nanomonsv
@@ -57,22 +57,22 @@ apptainer exec ${IMAGE_SIMULATIONSVSET}  \
 python3 $PWD/script/filt/add_repeat.py ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.txt \
   ${DB_DIR}/gene.bed.gz ${DB_DIR}/simpleRepeat.bed.gz > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.txt
 
-apptainer exec ${IMAGE_NANOMONSV}  \
-  nanomonsv insert_classify \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.txt \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.classify.txt \
-    ${REFERENCE} --genome_id hg38
+#apptainer exec ${IMAGE_NANOMONSV}  \
+#  nanomonsv insert_classify \
+#    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.txt \
+#    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.classify.txt \
+#    ${REFERENCE} --genome_id hg38
 
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
   python3 $PWD/script/filt/final_filter2.py \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.classify.txt \
+    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.txt \
     ${DB_DIR}/COLO829.nanomonsv.review_YS.txt ${DB_DIR}/cancer_gene_census_20200505.csv \
-    > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.classify.filter2.txt
+    > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.filter2.txt
 
 ## benchmark compare
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
   python3 $PWD/script/filt/benchmark_compare.py \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.classify.filter2.txt \
+    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.filt.pass.add_repeat.filter2.txt \
     ${DB_DIR}/Arora_2019.txt \
     ${DB_DIR}/Valle-Inclan_2020.txt \
     ${OUTPUT_DIR}/benchmark/${SVTOOL}_sv.benchmark.result.txt \

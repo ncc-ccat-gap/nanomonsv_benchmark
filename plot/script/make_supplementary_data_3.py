@@ -5,6 +5,9 @@ import sys, csv
 input_file_1 = sys.argv[1]
 input_file_2 = sys.argv[2]
 input_file_3 = sys.argv[3]
+title_1 = sys.argv[4]
+title_2 = sys.argv[5]
+title_3 = sys.argv[6]
 
 def add_key2info(input_file, key2info, num):
 
@@ -42,7 +45,7 @@ add_key2info(input_file_2, key2info, 1)
 add_key2info(input_file_3, key2info, 2)
 
 print("Chr_1\tPos_1\tDir_1\tChr_2\tPos_2\tDir_2\tInserted_Seq\tIs_Arora_et_al_2019\tIs_Valle-Inclan_et_al_2020\t" + \
-    "ONT_our_data_Supporting_Read_Num\tONT_PRJEB27698_Supporting_Read_Num\tPBS_PRJEB27698_Supporting_Read_Num")
+    title_1 + "_Supporting_Read_Num\t" + title_2 + "_Supporting_Read_Num\t" + title_3 + "_Supporting_Read_Num")
 for key in key2info:
     tkey = '\t'.join([str(x) for x in key])
     tinfo = '\t'.join(key2info[key])

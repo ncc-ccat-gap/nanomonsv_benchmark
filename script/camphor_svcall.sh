@@ -16,6 +16,7 @@ INPUT_BAM=$1
 OUTPUT_DIR=$2
 REFERENCE=$3
 
+rm -rf ${OUTPUT_DIR}
 mkdir -p ${OUTPUT_DIR}
 
 apptainer exec $PWD/image/camphor_somatic_20221005.sif \

@@ -1,23 +1,43 @@
 #! /usr/bin/env bash
 source ~/conda/x64/etc/profile.d/conda.sh
-conda activate nanomonsv_benchmark
+conda activate nanomonsv_benchmark_plot
 
 set -eux
 
-mkdir -p ../output
+INPUT_FILE_DIR=/home/aiokada/sandbox/nanomonsv_benchmark/output
+OUTPUT_DIR=../output
+mkdir -p ${OUTPUT_DIR}
 
-python3 summarize_detection.py ../output/benchmark.summary.count.txt ../output/benchmark.summary.ratio.txt
-python3 summarize_detection2.py ../output/benchmark2.summary.count.txt ../output/benchmark2.summary.ratio.txt
-python3 summarize_detection3.py ../output/benchmark3.summary.count.txt ../output/benchmark3.summary.ratio.txt
-python3 summarize_detection4.py ../output/benchmark4.summary.count.txt ../output/benchmark4.summary.ratio.txt
+# summarize benchmark (Arora_2019)
+python3 arora_supporting_reads.py \
+  ${INPUT_FILE_DIR}/sniffles2/benchmark/sniffles2_sv.Arora_2019.txt \
+> ${OUTPUT_DIR}/sniffles2_sv.Arora_2019.proc.txt
 
-python3 arora_supporting_reads.py ../output/COLO829_T_kataoka.nanomonsv.Arora_2019.txt > ../output/COLO829_T_kataoka.nanomonsv.Arora_2019.proc.txt
-python3 make_supplementary_data_3.py  ../output/COLO829_T_kataoka.nanomonsv.annot.filt.sp.benchmark.result.txt ../output/COLO829_T_Nanopore.nanomonsv.annot.filt.sp.benchmark.result.txt ../output/COLO829_T_PacBio.nanomonsv.annot.filt.sp.benchmark.result.txt > ../output/SupplementaryData3.tsv
+Rscript plot_COLO829.Arora_2019.SR_PE.R
 
-Rscript plot_count.R
-Rscript plot_count_summary3.R
-Rscript plot_count_summary4.R
-Rscript read_num_change.R
+# multiple samples
+python3 make_supplementary_data_3.py \
+  ${INPUT_FILE_DIR}/sniffles2/benchmark/sniffles2_sv.benchmark.result.txt \
+  ${INPUT_FILE_DIR}/cutesv/benchmark/cutesv_sv.benchmark.result.txt \
+  ${INPUT_FILE_DIR}/delly/benchmark/delly_sv.benchmark.result.txt \
+  sniffles2 cutesv delly \
+> ${OUTPUT_DIR}/SupplementaryData3.tsv
 
+python3 summarize_detection.py ${OUTPUT_DIR}/benchmark.summary.count.txt ${OUTPUT_DIR}/benchmark.summary.ratio.txt
+Rscript plot_benchmark_detection_count_summary.R
+Rscript plot_benchmark_detection_ratio_summary.R
 Rscript venn_diagram.R
-rm ../output/venn_*.png.*.log
+rm ${OUTPUT_DIR}/venn_*.png.*.log
+
+# multiple SV tools
+python3 summarize_detection2.py ${OUTPUT_DIR}/benchmark2.summary.count.txt ${OUTPUT_DIR}/benchmark2.summary.ratio.txt
+Rscript plot_benchmark_detection_ratio_summary2.R
+
+python3 summarize_detection3.py ${OUTPUT_DIR}/benchmark3.summary.count.txt ${OUTPUT_DIR}/benchmark3.summary.ratio.txt
+Rscript plot_benchmark_detection_ratio_summary3.R
+
+Rscript plot_read_num_change.R
+
+# control vs no control
+python3 summarize_detection4.py ${OUTPUT_DIR}/benchmark4.summary.count.txt ${OUTPUT_DIR}/benchmark4.summary.ratio.txt
+Rscript plot_benchmark_detection_ratio_summary4.R

@@ -18,6 +18,7 @@ REFERENCE=$3
 
 OUTPUT_DIR=$(dirname ${OUTPUT_VCF})
 
+rm -rf ${OUTPUT_DIR}
 mkdir -p ${OUTPUT_DIR}
 
 apptainer exec $PWD/image/cutesv_2.0.0.sif \
