@@ -50,23 +50,23 @@ apptainer exec ${IMAGE_SIMULATIONSVSET}  \
 
 ## benchmark commands
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
-  python3 $PWD/script/filt/filt_sniffles_svim.py \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.txt > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.txt
+  python3 $PWD/script/filt/filt_short_sv.py \
+    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.txt > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.txt
 
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
   python3 $PWD/script/filt/add_simple_repeat.py \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.txt \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.txt \
+    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.txt \
+    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.filt.txt \
     ${DB_DIR}/simpleRepeat.bed.gz --min_tumor_support_read 5
 
-head -n 1 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.txt \
-  > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.pass.txt
-tail -n +2 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.txt | grep PASS \
-  >> ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.pass.txt
+head -n 1 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.filt.txt \
+  > ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.filt.pass.txt
+tail -n +2 ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.filt.txt | grep PASS \
+  >> ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.filt.pass.txt
 
 apptainer exec ${IMAGE_SIMULATIONSVSET}  \
   python3 $PWD/script/filt/benchmark_compare.py \
-    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.sniffles2_filtered.proc.filt.pass.txt \
+    ${OUTPUT_DIR}/filt/${SVTOOL}_sv.rmdup.proc.filt.pass.txt \
     ${DB_DIR}/Arora_2019.txt \
     ${DB_DIR}/Valle-Inclan_2020.txt \
     ${OUTPUT_DIR}/benchmark/${SVTOOL}_sv.benchmark.result.txt \
